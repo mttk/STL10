@@ -1,4 +1,4 @@
 # Pycharm files
 .idea/
 # The actual dataset
-.data/
+data/
