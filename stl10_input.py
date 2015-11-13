@@ -79,6 +79,7 @@ def plot_image(image):
 def download_and_extract():
     """
     Download and extract the STL-10 dataset
+    Script largely copied from the Theano tutorial at www.deeplearning.net/tutorial
     :return: None
     """
     dest_directory = DATA_DIR
