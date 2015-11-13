@@ -14,9 +14,11 @@ SIZE = HEIGHT * WIDTH * DEPTH
 
 # path to the directory with the data
 DATA_DIR = './data'
+
+# url of the binary data
 DATA_URL = 'http://ai.stanford.edu/~acoates/stl10/stl10_binary.tar.gz'
 
-# path to the binary file with image data
+# path to the binary train file with image data
 DATA_PATH = './data/train_X.bin'
 
 
@@ -42,7 +44,9 @@ def read_all_images(path_to_data):
 
         # Now transpose the images into a standard image format
         # readable by, for example, matplotlib.imshow
-
+        # You might want to comment this line or reverse the shuffle
+        # if you will use a learning algorithm like CNN, since they like
+        # their channels separated.
         images = np.transpose(images, (0, 3, 2, 1))
         return images
 
@@ -58,6 +62,9 @@ def read_single_image(image_file):
     # force into image matrix
     image = np.reshape(image, (3, 96, 96))
     # transpose to standard format
+    # You might want to comment this line or reverse the shuffle
+    # if you will use a learning algorithm like CNN, since they like
+    # their channels separated.
     image = np.transpose(image, (2, 1, 0))
     return image
 
@@ -93,8 +100,8 @@ if __name__ == "__main__":
     download_and_extract()
 
     # test to check if the image is read correctly
-    with open(DATA_PATH) as file:
-        image = read_single_image(file)
+    with open(DATA_PATH) as f:
+        image = read_single_image(f)
         plot_image(image)
 
     # test to check if the whole dataset is read correctly
