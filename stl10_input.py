@@ -1,4 +1,8 @@
+import os, sys, tarfile, urllib
+
 import numpy as np
+
+import matplotlib.pyplot as plt
 
 # image shape
 HEIGHT = 96
@@ -8,14 +12,19 @@ DEPTH = 3
 # size of a single image in bytes
 SIZE = HEIGHT * WIDTH * DEPTH
 
+# path to the directory with the data
+DATA_DIR = './data'
+DATA_URL = 'http://ai.stanford.edu/~acoates/stl10/stl10_binary.tar.gz'
+
 # path to the binary file with image data
 DATA_PATH = './data/train_X.bin'
 
+
 def read_all_images(path_to_data):
-    '''
+    """
     :param path_to_data: the file containing the binary images from the STL-10 dataset
     :return: an array containing all the images
-    '''
+    """
 
     with open(path_to_data, 'rb') as f:
         # read whole file in uint8 chunks
@@ -38,12 +47,12 @@ def read_all_images(path_to_data):
         return images
 
 def read_single_image(image_file):
-    '''
+    """
     CAREFUL! - this method uses a file as input instead of the path - so the
     position of the reader will be remembered outside of context of this method.
     :param image_file: the open file containing the images
     :return: a single image
-    '''
+    """
     # read a single image, count determines the number of uint8's to read
     image = np.fromfile(image_file, dtype=np.uint8, count=SIZE)
     # force into image matrix
@@ -53,15 +62,35 @@ def read_single_image(image_file):
     return image
 
 def plot_image(image):
-    '''
+    """
     :param image: the image to be plotted in a 3-D matrix format
     :return: None
-    '''
-    import matplotlib.pyplot as plt
+    """
     plt.imshow(image)
     plt.show()
 
+def download_and_extract():
+    """
+    Download and extract the STL-10 dataset
+    :return: None
+    """
+    dest_directory = DATA_DIR
+    if not os.path.exists(dest_directory):
+        os.makedirs(dest_directory)
+    filename = DATA_URL.split('/')[-1]
+    filepath = os.path.join(dest_directory, filename)
+    if not os.path.exists(filepath):
+        def _progress(count, block_size, total_size):
+            sys.stdout.write('\rDownloading %s %.2f%%' % (filename,
+                float(count * block_size) / float(total_size) * 100.0))
+            sys.stdout.flush()
+        filepath, _ = urllib.urlretrieve(DATA_URL, filepath, reporthook=_progress)
+        print('Downloaded', filename)
+        tarfile.open(filepath, 'r:gz').extractall(dest_directory)
+
 if __name__ == "__main__":
+    # download data if needed
+    download_and_extract()
 
     # test to check if the image is read correctly
     with open(DATA_PATH) as file:
