@@ -19,7 +19,7 @@ DATA_DIR = './data'
 DATA_URL = 'http://ai.stanford.edu/~acoates/stl10/stl10_binary.tar.gz'
 
 # path to the binary train file with image data
-DATA_PATH = './data/train_X.bin'
+DATA_PATH = './data/stl10_binary/train_X.bin'
 
 
 def read_all_images(path_to_data):
