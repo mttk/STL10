@@ -2,3 +2,5 @@
 .idea/
 # The actual dataset
 data/
+# pyc files
+*.pyc
