@@ -1,7 +1,5 @@
 import os, sys, tarfile, urllib
-
 import numpy as np
-
 import matplotlib.pyplot as plt
 
 # image shape
@@ -20,6 +18,18 @@ DATA_URL = 'http://ai.stanford.edu/~acoates/stl10/stl10_binary.tar.gz'
 
 # path to the binary train file with image data
 DATA_PATH = './data/stl10_binary/train_X.bin'
+
+# path to the binary train file with labels
+LABEL_PATH = './data/stl10_binary/train_y.bin'
+
+def read_labels(path_to_labels):
+    """
+    :param path_to_labels: path to the binary file containing labels from the STL-10 dataset
+    :return: an array containing the labels
+    """
+    with open(path_to_labels, 'rb') as f:
+        labels = np.fromfile(f, dtype=np.uint8)
+        return labels
 
 
 def read_all_images(path_to_data):
@@ -50,6 +60,7 @@ def read_all_images(path_to_data):
         images = np.transpose(images, (0, 3, 2, 1))
         return images
 
+
 def read_single_image(image_file):
     """
     CAREFUL! - this method uses a file as input instead of the path - so the
@@ -68,6 +79,7 @@ def read_single_image(image_file):
     image = np.transpose(image, (2, 1, 0))
     return image
 
+
 def plot_image(image):
     """
     :param image: the image to be plotted in a 3-D matrix format
@@ -76,10 +88,10 @@ def plot_image(image):
     plt.imshow(image)
     plt.show()
 
+
 def download_and_extract():
     """
     Download and extract the STL-10 dataset
-    Script largely copied from the Theano tutorial at www.deeplearning.net/tutorial
     :return: None
     """
     dest_directory = DATA_DIR
@@ -108,3 +120,6 @@ if __name__ == "__main__":
     # test to check if the whole dataset is read correctly
     images = read_all_images(DATA_PATH)
     print images.shape
+
+    labels = read_labels(LABEL_PATH)
+    print labels.shape
