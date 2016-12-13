@@ -1,6 +1,16 @@
-import os, sys, tarfile, urllib
+from __future__ import print_function
+
+import sys
+import os, sys, tarfile
 import numpy as np
 import matplotlib.pyplot as plt
+    
+if sys.version_info >= (3, 0, 0):
+    import urllib.request as urllib # ugly but works
+else:
+    import urllib
+
+print(sys.version_info) 
 
 # image shape
 HEIGHT = 96
@@ -119,7 +129,7 @@ if __name__ == "__main__":
 
     # test to check if the whole dataset is read correctly
     images = read_all_images(DATA_PATH)
-    print images.shape
+    print(images.shape)
 
     labels = read_labels(LABEL_PATH)
-    print labels.shape
+    print(labels.shape)
