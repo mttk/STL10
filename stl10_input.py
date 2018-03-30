@@ -1,7 +1,7 @@
 from __future__ import print_function
 
 import sys
-import os, sys, tarfile
+import os, sys, tarfile, errno
 import numpy as np
 import matplotlib.pyplot as plt
     
@@ -98,6 +98,15 @@ def plot_image(image):
     plt.imshow(image)
     plt.show()
 
+def save_image(image, name):
+    for spine in plt.gca().spines.values():
+        spine.set_visible(False)
+
+    plt.tick_params(top=False, bottom=False, left=False, right=False, labelleft=False, labelbottom=True)
+    plt.axis('off')
+    
+    plt.imshow(image)
+    plt.savefig(name, bbox_inches='tight', dpi=96)
 
 def download_and_extract():
     """
@@ -118,6 +127,22 @@ def download_and_extract():
         print('Downloaded', filename)
         tarfile.open(filepath, 'r:gz').extractall(dest_directory)
 
+def save_images(images, labels):
+    print("Saving images to disk")
+    i = 0
+    for image in images:
+        label = labels[i]
+        directory = './img/' + str(label) + '/'
+        try:
+            os.mkdir(directory)
+        except OSError as exc:
+            if exc.errno == errno.EEXIST:
+                pass
+        filename = directory + str(i)
+        print(filename)
+        save_image(image, filename)
+        i = i+1
+    
 if __name__ == "__main__":
     # download data if needed
     download_and_extract()
@@ -133,3 +158,6 @@ if __name__ == "__main__":
 
     labels = read_labels(LABEL_PATH)
     print(labels.shape)
+
+    # save images to disk
+    save_images(images, labels)
