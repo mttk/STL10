@@ -134,7 +134,7 @@ def save_images(images, labels):
         label = labels[i]
         directory = './img/' + str(label) + '/'
         try:
-            os.mkdir(directory)
+            os.makedirs(directory, exist_ok=True)
         except OSError as exc:
             if exc.errno == errno.EEXIST:
                 pass
