@@ -10,6 +10,11 @@ if sys.version_info >= (3, 0, 0):
 else:
     import urllib
 
+try:
+    from imageio import imsave
+except:
+    from scipy.misc import imsave
+
 print(sys.version_info) 
 
 # image shape
@@ -99,14 +104,7 @@ def plot_image(image):
     plt.show()
 
 def save_image(image, name):
-    for spine in plt.gca().spines.values():
-        spine.set_visible(False)
-
-    plt.tick_params(top=False, bottom=False, left=False, right=False, labelleft=False, labelbottom=True)
-    plt.axis('off')
-    
-    plt.imshow(image)
-    plt.savefig(name, bbox_inches='tight', dpi=96)
+    imsave("%s.png" % name, image, format="png")
 
 def download_and_extract():
     """
